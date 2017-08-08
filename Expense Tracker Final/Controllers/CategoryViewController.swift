@@ -12,37 +12,9 @@ import CoreData
 
 class CategoryViewController: UITableViewController {
     
-    var categories:[NSManagedObject] = []{
-        //"Food","Transportation","Medical Expense","Shopping","Entertainment","Private"
+    var categories = [Category]() {
         didSet{
             tableView.reloadData()
-        }
-    }
-    
-    func save(newCategory: String) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        // 1
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        // 2
-        let entity = NSEntityDescription.insertNewObject(forEntityName: "Category", into: managedContext) as! Category
-        
-//        let newCreatedCategory = NSManagedObject(entity: entity, insertInto: managedContext)
-        
-        // 3
-//        newCreatedCategory.setValue(newCategory, forKeyPath: "newCategory")
-        
-        // 4
-        do {
-            try managedContext.save()
-            //categories.append(entity)
-            print (categories)
-            
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
         }
     }
     
@@ -54,9 +26,13 @@ class CategoryViewController: UITableViewController {
                 let categoryToSave = textField.text else {
                     return
             }
-            //var newCategoryName = alert.textFields![0]
-            //self.categories.append(newCategoryName.text!)
-            self.save(newCategory: categoryToSave)
+
+            let newCategory:Category = CoreDataHelper.createNewCategory()
+            newCategory.title = categoryToSave
+            
+            CoreDataHelper.save()
+            self.categories = CoreDataHelper.retrieveCategories()
+
         })
         
         let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) -> Void in })
@@ -73,36 +49,10 @@ class CategoryViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
-        
+        super.viewDidLoad()
+        self.categories = CoreDataHelper.retrieveCategories()
         tableView.reloadData()
-        
-       /* let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let persistentContainer = appDelegate.persistentContainer
-        let context = persistentContainer.viewContext*/
-        
-    /*let newCategory = NSEntityDescription.insertNewObject(forEntityName: "Category", into: managedContext)*/
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
-        }
-        
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest =
-            NSFetchRequest<NSManagedObject>(entityName: "Category")
-        
-        do {
-            categories = try managedContext.fetch(fetchRequest)
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
+
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -110,24 +60,27 @@ class CategoryViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryTableViewCell
         
-        let newCreatedCategory = categories[indexPath.row]
+        let row = indexPath.row
+        let category = categories[row]
+        cell.categoryLabel.text = category.title
         
-        cell.categoryLabel.text = newCreatedCategory.value(forKeyPath:"newCategory") as? String
-        
-        return cell
-        
+    return cell
     }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = .checkmark
+        UserDefaults.standard.set(categories[indexPath.row].title!, forKey: "selectedCategory")
+        
+        performSegue(withIdentifier: "unwindToNewTransactionViewController", sender: self)
+        
+    }
 }
-
-
-
-
-

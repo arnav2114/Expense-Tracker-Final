@@ -1,53 +1,51 @@
 //
-//  CurrencyViewController.swift
+//  CollectionSelectorViewController.swift
 //  Expense Tracker Final
 //
-//  Created by Arnav Gupta  on 4/8/17.
+//  Created by Arnav Gupta  on 7/8/17.
 //  Copyright © 2017 Arnav Gupta. All rights reserved.
 //
 
 import Foundation
 import UIKit
+import CoreData
 
-
-class CurrencyController: UITableViewController{
-    var currencies:[String] = ["¥ JPY","$ USD","$ SGD","£ GBP","€ EUR","₹ INR"]
+class CollectionSelectorViewController: UITableViewController {
+    
+    var collectionToBeDisplayed = [Collections](){
+        didSet{
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
-        self.navigationItem.leftBarButtonItem?.title = "Back"
-        super.viewDidLoad()
+        self.collectionToBeDisplayed = CoreDataHelper.retrieveCollections()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currencies.count
+       return collectionToBeDisplayed.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "currencyCell", for: indexPath) as! CurrencyTableViewCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "collectionDisplayCell", for: indexPath) as! CollectionTableViewCell
         let row = indexPath.row
-        let currency = currencies[row]
-        cell.currencyLabel.text = currency
-        
+        let collections = collectionToBeDisplayed[row]
+        cell.collectionLabel.text = collections.title
         return cell
-        
-            }
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
-        }
-    
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = .checkmark
-        UserDefaults.standard.set(currencies[indexPath.row], forKey: "selectedCurrency")
+        UserDefaults.standard.set(collectionToBeDisplayed[indexPath.row].title!, forKey: "selectedCollection")
+        
         performSegue(withIdentifier: "unwindToNewTransactionViewController", sender: self)
         
     }
-
 }
-
-
-

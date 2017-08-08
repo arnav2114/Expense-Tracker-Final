@@ -12,6 +12,7 @@
 		470468F31F36B25D0088A0FF /* YearViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470468F21F36B25D0088A0FF /* YearViewController.swift */; };
 		470468F51F36B2770088A0FF /* YearTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470468F41F36B2770088A0FF /* YearTableViewCell.swift */; };
 		470468F81F38171C0088A0FF /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470468F71F38171C0088A0FF /* CoreDataHelper.swift */; };
+		470468FA1F3845D00088A0FF /* CollectionSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470468F91F3845D00088A0FF /* CollectionSelectorViewController.swift */; };
 		47762FD21F342D9100491F8B /* CurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47762FD11F342D9100491F8B /* CurrencyTableViewCell.swift */; };
 		47762FD51F34306000491F8B /* CollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47762FD41F34306000491F8B /* CollectionTableViewCell.swift */; };
 		47968CFA1F35F3C800301482 /* CurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47968CF81F35F3C800301482 /* CurrencyViewController.swift */; };
@@ -36,6 +37,7 @@
 		470468F21F36B25D0088A0FF /* YearViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearViewController.swift; sourceTree = "<group>"; };
 		470468F41F36B2770088A0FF /* YearTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearTableViewCell.swift; sourceTree = "<group>"; };
 		470468F71F38171C0088A0FF /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		470468F91F3845D00088A0FF /* CollectionSelectorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionSelectorViewController.swift; path = Controllers/CollectionSelectorViewController.swift; sourceTree = "<group>"; };
 		47762FD11F342D9100491F8B /* CurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyTableViewCell.swift; sourceTree = "<group>"; };
 		47762FD41F34306000491F8B /* CollectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionTableViewCell.swift; sourceTree = "<group>"; };
 		47968CF81F35F3C800301482 /* CurrencyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CurrencyViewController.swift; path = Controllers/CurrencyViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				47B300B41F3409FF0013E4C6 /* CategoryViewController.swift */,
 				47D511341F3579A80088C228 /* CollectionCreatorViewController.swift */,
 				470468F21F36B25D0088A0FF /* YearViewController.swift */,
+				470468F91F3845D00088A0FF /* CollectionSelectorViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 			files = (
 				470468F11F36A9000088A0FF /* MainTableViewCell.swift in Sources */,
 				47762FD21F342D9100491F8B /* CurrencyTableViewCell.swift in Sources */,
+				470468FA1F3845D00088A0FF /* CollectionSelectorViewController.swift in Sources */,
 				470468F81F38171C0088A0FF /* CoreDataHelper.swift in Sources */,
 				47B300B51F3409FF0013E4C6 /* CategoryViewController.swift in Sources */,
 				47968CFB1F35F3C800301482 /* MainScreenController.swift in Sources */,
@@ -423,6 +427,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.arnavgup.Expense-Tracker-Final";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;

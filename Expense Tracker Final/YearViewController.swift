@@ -13,12 +13,6 @@ class YearViewController: UITableViewController{
     
     var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Total"]
     
-    @IBAction func unwindToMainScreenController(_ segue: UIStoryboardSegue) {
-        
-        // for now, simply defining the method is sufficient.
-        // we'll add code later
-        
-    }
     
     override func viewDidLoad() {
         self.navigationItem.hidesBackButton = true

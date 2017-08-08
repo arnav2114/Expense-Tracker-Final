@@ -38,6 +38,10 @@ class MainScreenController: UIViewController {
         self.navigationItem.title = result
 
     }
+    
+    @IBAction func unwindToMainScreenController(_ segue: UIStoryboardSegue) {
+        
+    }
 }
 
 extension MainScreenController: UITableViewDataSource {
