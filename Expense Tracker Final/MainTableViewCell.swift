@@ -15,5 +15,7 @@ class MainTableViewCell: UITableViewCell {
     @IBOutlet weak var expenseLabel:UILabel!
     @IBOutlet weak var expenseCategory:UILabel!
     @IBOutlet weak var expenseAmount: UILabel!
+    @IBOutlet weak var expenseCollection: UILabel!
+    @IBOutlet weak var expenseCurrency: UILabel!
     
 }

@@ -12,6 +12,8 @@ import CoreData
 
 class CollectionSelectorViewController: UITableViewController {
     
+    var collection : Collections?
+    
     var collectionToBeDisplayed = [Collections](){
         didSet{
             tableView.reloadData()
@@ -37,14 +39,14 @@ class CollectionSelectorViewController: UITableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = .checkmark
         UserDefaults.standard.set(collectionToBeDisplayed[indexPath.row].title!, forKey: "selectedCollection")
-        
+        self.collection = collectionToBeDisplayed[indexPath.row]
         performSegue(withIdentifier: "unwindToNewTransactionViewController", sender: self)
         
     }

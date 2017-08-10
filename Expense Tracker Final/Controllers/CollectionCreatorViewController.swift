@@ -17,6 +17,7 @@ class CollectionCreatorViewController: UITableViewController {
                 tableView.reloadData()
             }
         }
+    var collectionNamePassed:String = ""
         
         @IBAction func addCollectionButton(_ sender: Any) {
             let alert = UIAlertController(title: "Create New Collection", message: "", preferredStyle: .alert)
@@ -64,15 +65,41 @@ class CollectionCreatorViewController: UITableViewController {
             
             let row = indexPath.row
             let collection1 = collections[row]
-            cell.collectionName.text = collection1.title as! String
+            cell.collectionName.text = collection1.title!
             
+            
+
             return cell
         }
         
         override func numberOfSections(in tableView: UITableView) -> Int {
             return 1
         }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let collectionDisplayController = segue.destination as! CollectionDisplayViewController
+        collectionDisplayController.navigationItem.title = collectionNamePassed
         
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-}
+        collectionNamePassed = collections[indexPath.row].title!
+        
+        performSegue(withIdentifier: "displayCollection", sender: self)
 
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            if indexPath.row != nil {
+                let collection = collections[indexPath.row]
+                CoreDataHelper.deleteCollection(collection: collection)
+                collections.remove(at: indexPath.row)
+                collections = CoreDataHelper.retrieveCollections()
+            }
+            
+        }
+    }
+    
+}

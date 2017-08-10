@@ -8,11 +8,17 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class YearViewController: UITableViewController{
     
     var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Total"]
     
+    var monthPassed:String = ""
+    
+    /*@IBAction func moveBackToMonth(_sender:AnyObject){
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }*/
     
     override func viewDidLoad() {
         self.navigationItem.hidesBackButton = true
@@ -30,6 +36,8 @@ class YearViewController: UITableViewController{
         
         cell.monthLabel.text = months[indexPath.row]
         
+       //cell.monthAmountLabel.text = MonthlyDisplayViewController.sum
+        
         cell.monthAmountLabel.text = "0.00"
         
         return cell
@@ -38,6 +46,19 @@ class YearViewController: UITableViewController{
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let monthlyDisplayController = segue.destination as! MonthlyDisplayViewController
+        monthlyDisplayController.navigationItem.title = monthPassed
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        monthPassed = months[indexPath.row]
+        
+        performSegue(withIdentifier: "displayMonth", sender: self)
+        
+    }
 }
+
 

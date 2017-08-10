@@ -11,7 +11,7 @@ import UIKit
 
 
 class CurrencyController: UITableViewController{
-    var currencies:[String] = ["¥ JPY","$ USD","$ SGD","£ GBP","€ EUR","₹ INR"]
+    var currencies:[String] = ["JPY ¥","USD $","SGD $","GBP £","EUR €","INR ₹"]
     
     override func viewDidLoad() {
         self.navigationItem.leftBarButtonItem?.title = "Back"

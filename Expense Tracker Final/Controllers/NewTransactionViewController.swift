@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 
 class NewTransactionController: UIViewController {
@@ -17,17 +18,26 @@ class NewTransactionController: UIViewController {
     var collectionsDisplayed:String = ""
     var currencyDisplayed:String = ""
     
+    var collection : Collections?
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var expenseLabel: UITextField!
     @IBOutlet weak var amountLabel: UITextField!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var expenseType: UISegmentedControl!
+    
+    var newExpenses: Expense?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
-        self.navigationItem.backBarButtonItem = UIBarButtonItem.init(title: "Back", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
         
+        self.navigationItem.hidesBackButton = true
+
+        if let expense = newExpenses {
+            expenseLabel.text = expense.name
+            amountLabel.text = expense.amount
+            expense.collection! = collectionsDisplayed
+            expense.currency! = currencyDisplayed
+        }
         amountLabel.layer.cornerRadius = 0.0
         expenseLabel.layer.cornerRadius = 0.0
         
@@ -65,10 +75,62 @@ class NewTransactionController: UIViewController {
         }
 
         
+        
     }
     
-}
+  
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if identifier == "categorySelect" {
+            } else if identifier == "albumSelect" {
+            }
+            else if identifier == "currencySelect"{
+            }
+            else if identifier == "saveExpense"{
+                
+                let expense = self.newExpenses ?? CoreDataHelper.newExpense()
+                switch expenseType.selectedSegmentIndex{
+                case 0: expense.income = true && expense.expense != true
+                case 1: expense.expense = true && expense.income != true
+                default:
+                    break
+                }
+                expense.name = expenseLabel.text
+                expense.category = categoryDisplayed
+                expense.collection = collectionsDisplayed
+                expense.amount = amountLabel.text
+                expense.currency = currencyDisplayed
+                expense.modificationDate = Date() as NSDate
+                
+                expenseLabel.text = nil
+                amountLabel.text = nil
+                
+                CoreDataHelper.save()
 
+                
+            }
+        }
+    
+}
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if expenseLabel.text == "" || amountLabel.text == "" || collectionsDisplayed == "" || categoryDisplayed == "" || currencyDisplayed == ""{
+            let alert = UIAlertController(title: "Some Fields are Missing", message: "Please fill out all the fields", preferredStyle: UIAlertControllerStyle.alert)
+            let defaultAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive, handler: nil)
+            alert.addAction(defaultAction)
+            self.present(alert, animated: true, completion: nil)
+            return false
+            
+        }
+            
+        else {
+            CoreDataHelper.save()
+        }
+        
+        
+        return true
+    }
+}
 extension NewTransactionController: UITableViewDataSource {
 
 
@@ -88,7 +150,6 @@ extension NewTransactionController: UITableViewDataSource {
             cell.methodType.isHidden = true
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.optionSelectedLabel.isHidden = false
-            print(categoryDisplayed)
             cell.optionSelectedLabel.text! = categoryDisplayed
             
         } else if indexPath.row == 1 {
@@ -100,14 +161,12 @@ extension NewTransactionController: UITableViewDataSource {
             cell.methodType.isHidden = true
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.optionSelectedLabel.isHidden = false
-            print(currencyDisplayed)
             cell.optionSelectedLabel.text! = currencyDisplayed
 
         } else if indexPath.row == 3{
             cell.methodType.isHidden = true
             cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             cell.optionSelectedLabel.isHidden = false
-            print(collectionsDisplayed)
             cell.optionSelectedLabel.text! = collectionsDisplayed
 
         }
@@ -121,6 +180,7 @@ extension NewTransactionController: UITableViewDataSource {
     @IBAction func unwindToNewTransactionViewController(_ segue: UIStoryboardSegue) {
 
     }
+    
 }
 
 extension NewTransactionController: UITableViewDelegate {
@@ -147,17 +207,6 @@ extension UIViewController {
     
     func dismissKeyboard() {
         view.endEditing(true)
-    }
-    
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let identifier = segue.identifier {
-            if identifier == "categorySelect" {
-            } else if identifier == "albumSelect" {
-            }
-            else if identifier == "currencySelect"{
-            }
-        }
-        
     }
 
 }

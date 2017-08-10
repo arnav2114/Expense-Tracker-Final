@@ -13,9 +13,10 @@ class ListDataTableViewCell: UITableViewCell {
     
     @IBOutlet weak var dataTitleLabel: UILabel!
         
-    @IBOutlet weak var methodType: UISegmentedControl!
-    
     @IBOutlet weak var optionSelectedLabel: UILabel!
+    
+    @IBOutlet weak var methodType: UISegmentedControl!
+
 
    // @IBOutlet weak var methodType: UISegmentedControl!
    // @IBOutlet weak var methodType: UISegmentedControl!

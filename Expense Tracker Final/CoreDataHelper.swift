@@ -15,6 +15,7 @@ class CoreDataHelper {
     static let appDelegate = UIApplication.shared.delegate as! AppDelegate
     static let persistentContainer = appDelegate.persistentContainer
     static let managedContext = persistentContainer.viewContext
+    
     //--Category Methods--//
     static func createNewCategory() -> Category {
         let entity = NSEntityDescription.insertNewObject(forEntityName: "Category", into: managedContext) as! Category
@@ -63,8 +64,36 @@ class CoreDataHelper {
         }
         return []
     }
+    static func deleteCollection(collection:Collections) {
+        managedContext.delete(collection)
+        save()
+    }
     //--Collection Methods End --//
-}
+    
+    //---New Expense Method Start --//
+    
+    static func newExpense() -> Expense {
+        let expense = NSEntityDescription.insertNewObject(forEntityName: "Expense", into: managedContext) as! Expense
+        return expense
+    }
+    
+    static func deleteExpense(expense:Expense) {
+        managedContext.delete(expense)
+        save()
+    }
+    static func retrieveExpenses() -> [Expense] {
+        let fetchRequest = NSFetchRequest<Expense>(entityName: "Expense")
+        do {
+            let results = try managedContext.fetch(fetchRequest)
+            return results
+        } catch let error as NSError{
+            print ("Could not retrieve \(error)")
+        }
+        return []
+    }
+
+    
+    }
 
 
 
