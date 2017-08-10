@@ -663,18 +663,28 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Amount" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahe-S2-XGe">
+                                            <rect key="frame" x="206" y="11" width="106" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="ZhJ-ud-Wrb" firstAttribute="trailing" secondItem="h6e-AH-OoP" secondAttribute="trailingMargin" id="3qZ-er-9rl"/>
+                                        <constraint firstItem="ahe-S2-XGe" firstAttribute="centerY" secondItem="h6e-AH-OoP" secondAttribute="centerY" id="6kB-Yg-eJ8"/>
                                         <constraint firstItem="ZhJ-ud-Wrb" firstAttribute="centerY" secondItem="h6e-AH-OoP" secondAttribute="centerY" id="KF0-oQ-t4v"/>
                                         <constraint firstItem="F4F-ak-mF2" firstAttribute="centerY" secondItem="h6e-AH-OoP" secondAttribute="centerY" id="Ncn-iT-S74"/>
                                         <constraint firstItem="ZhJ-ud-Wrb" firstAttribute="leading" secondItem="F4F-ak-mF2" secondAttribute="trailing" constant="89" id="Z9J-F7-bU0"/>
                                         <constraint firstItem="F4F-ak-mF2" firstAttribute="leading" secondItem="h6e-AH-OoP" secondAttribute="leadingMargin" constant="10" id="Zux-ks-odC"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ahe-S2-XGe" secondAttribute="trailing" id="qau-AY-ngQ"/>
+                                        <constraint firstItem="ahe-S2-XGe" firstAttribute="leading" secondItem="ZhJ-ud-Wrb" secondAttribute="leading" id="syO-WC-ghL"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="monthAmountLabel" destination="ZhJ-ud-Wrb" id="v3c-g6-bfV"/>
                                     <outlet property="monthLabel" destination="F4F-ak-mF2" id="MoY-6W-W9J"/>
+                                    <outlet property="totalAmountLabel" destination="ahe-S2-XGe" id="Yd3-Kr-JEL"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -685,7 +695,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="This Year" id="CWI-cN-olQ">
                         <barButtonItem key="leftBarButtonItem" id="n1s-ij-dHb"/>
-                        <barButtonItem key="rightBarButtonItem" image="Tab Bar Icons" id="ecX-La-5iM"/>
+                        <barButtonItem key="rightBarButtonItem" image="Tab Bar Icons" id="ecX-La-5iM">
+                            <connections>
+                                <action selector="moveBackToMonthWith_sender:" destination="6EJ-Ie-ED0" id="rTr-5H-bal"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="RDZ-UA-AaR" kind="show" identifier="displayMonth" id="fE3-mY-6TJ"/>

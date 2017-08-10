@@ -12,4 +12,5 @@ import UIKit
 class YearTableViewCell: UITableViewCell {
     @IBOutlet weak var monthLabel:UILabel!
     @IBOutlet weak var monthAmountLabel:UILabel!
+    @IBOutlet weak var totalAmountLabel: UILabel!
 }

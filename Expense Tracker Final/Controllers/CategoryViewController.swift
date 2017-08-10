@@ -73,6 +73,7 @@ class CategoryViewController: UITableViewController {
         let category = categories[row]
         cell.categoryLabel.text = category.title
         
+        
     return cell
     }
     

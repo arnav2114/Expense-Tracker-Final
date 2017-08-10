@@ -25,15 +25,7 @@ class MainScreenController: UIViewController {
         
         super.viewDidLoad()
         self.expenses = CoreDataHelper.retrieveExpenses()
-        
-        let date2 = Date()
-        let formatter2 = DateFormatter()
-        
-        formatter2.dateFormat = "MMMM yyyy"
-        let result2 = formatter2.string(from: date2)
-        
-        self.navigationItem.title = result2
-
+    
     }
 
     override func viewWillAppear(_ animated: Bool) {        
@@ -44,6 +36,14 @@ class MainScreenController: UIViewController {
         let result = formatter.string(from: date)
         
         todayDate.text = result
+        
+        let formatter2 = DateFormatter()
+        
+        formatter2.dateFormat = "MMMM yyyy"
+        let result2 = formatter2.string(from: date)
+        
+        self.navigationItem.title = result2
+
 
         self.expenses = CoreDataHelper.retrieveExpenses()
 

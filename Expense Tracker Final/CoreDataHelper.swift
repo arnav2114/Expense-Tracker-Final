@@ -24,8 +24,6 @@ class CoreDataHelper {
     static func save() {
         do {
             try managedContext.save()
-            //categories.append(entity)
-            //print (categories)
             
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
@@ -92,7 +90,7 @@ class CoreDataHelper {
         return []
     }
 
-    
+   
     }
 
 

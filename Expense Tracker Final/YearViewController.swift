@@ -16,15 +16,37 @@ class YearViewController: UITableViewController{
     
     var monthPassed:String = ""
     
-    /*@IBAction func moveBackToMonth(_sender:AnyObject){
-        self.presentingViewController?.dismiss(animated: true, completion: nil)
-    }*/
+    var totalAmountDisplayed:String = ""
     
-    override func viewDidLoad() {
-        self.navigationItem.hidesBackButton = true
-
+    var totalFinalAmount:Int = 0
+    
+    var monthExpenses = [Expense]() {
+        didSet {
+            tableView.reloadData()
+        }
     }
 
+    
+    @IBAction func moveBackToMonth(_sender:AnyObject){
+    
+        _ = navigationController?.popViewController(animated: true);
+
+     }
+    
+    override func viewDidLoad() {
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationItem.hidesBackButton = true
+        
+        if let total = UserDefaults.standard.string(forKey: "totalAmount") {
+                    self.totalAmountDisplayed = total
+                    tableView.reloadData()
+                }
+        
+        
+            }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return months.count
@@ -36,9 +58,21 @@ class YearViewController: UITableViewController{
         
         cell.monthLabel.text = months[indexPath.row]
         
-       //cell.monthAmountLabel.text = MonthlyDisplayViewController.sum
+            
+        cell.monthAmountLabel.text = totalAmountDisplayed
         
-        cell.monthAmountLabel.text = "0.00"
+        cell.totalAmountLabel.text = String(totalFinalAmount)
+        
+        if indexPath.row == 12 {
+            
+            cell.totalAmountLabel.isHidden = false
+            cell.monthAmountLabel.isHidden = true
+        }
+        else {
+            cell.totalAmountLabel.isHidden = true
+            cell.monthAmountLabel.isHidden = false
+        }
+        
         
         return cell
         

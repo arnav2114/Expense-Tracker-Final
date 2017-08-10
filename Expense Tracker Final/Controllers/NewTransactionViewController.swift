@@ -13,7 +13,7 @@ import CoreData
 
 class NewTransactionController: UIViewController {
     
-    var dataArray:[String] = ["Category", "Method", "Currency", "Album"]
+    var dataArray:[String] = ["Category", "Method", "Currency", "Collection"]
     var categoryDisplayed:String = ""
     var collectionsDisplayed:String = ""
     var currencyDisplayed:String = ""
@@ -37,6 +37,7 @@ class NewTransactionController: UIViewController {
             amountLabel.text = expense.amount
             expense.collection! = collectionsDisplayed
             expense.currency! = currencyDisplayed
+            expense.category! = categoryDisplayed
         }
         amountLabel.layer.cornerRadius = 0.0
         expenseLabel.layer.cornerRadius = 0.0
