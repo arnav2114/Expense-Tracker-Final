@@ -64,6 +64,25 @@ class MainScreenController: UIViewController {
                 let displayNewTransactionController = segue.destination as! NewTransactionController
                 displayNewTransactionController.newExpenses = expense
                 
+                if let category = UserDefaults.standard.string(forKey: "selectedCategory") {
+                    displayNewTransactionController.categoryDisplayed = category
+                    tableView.reloadData()
+                    
+                }
+                
+                if let collections = UserDefaults.standard.string(forKey: "selectedCollection") {
+                    displayNewTransactionController.collectionsDisplayed = collections
+                    tableView.reloadData()
+                    
+                }
+                
+                if let currency = UserDefaults.standard.string(forKey: "selectedCurrency") {
+                    displayNewTransactionController.currencyDisplayed = currency
+                    tableView.reloadData()
+                    
+                }
+
+                
             }
         }
     }
