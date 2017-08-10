@@ -60,6 +60,7 @@ class MainScreenController: UIViewController {
             if identifier == "changeTransaction" {
                 let indexPath = tableView.indexPathForSelectedRow!
                 let expense = expenses[indexPath.row]
+                
                 let displayNewTransactionController = segue.destination as! NewTransactionController
                 displayNewTransactionController.newExpenses = expense
                 

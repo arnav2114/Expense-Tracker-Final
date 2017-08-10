@@ -164,7 +164,7 @@
         <scene sceneID="cWX-1n-6sQ">
             <objects>
                 <navigationController id="51D-lu-WdM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Collections" id="CRe-yn-Lhu"/>
+                    <tabBarItem key="tabBarItem" title="Collections" image="Collection Icon" selectedImage="Collection Icon" id="CRe-yn-Lhu"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qIS-Ig-JXK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -490,7 +490,7 @@
         <scene sceneID="VtT-8m-LvA">
             <objects>
                 <navigationController id="3V0-DU-YYN" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home View" id="0gS-Qt-b4H"/>
+                    <tabBarItem key="tabBarItem" title="Home View" image="Home Display Icon" selectedImage="Home Display Icon" id="0gS-Qt-b4H"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8X9-6e-79p">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -814,7 +814,7 @@
         <scene sceneID="xXO-hd-K69">
             <objects>
                 <navigationController id="LS6-oh-BAO" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Add Entry" id="dVf-OI-pVm"/>
+                    <tabBarItem key="tabBarItem" title="Add Entry" image="Add Expense Icon" selectedImage="Add Expense Icon" id="dVf-OI-pVm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="jN8-yf-1rW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -849,9 +849,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Add Expense Icon" width="25" height="25"/>
+        <image name="Collection Icon" width="25" height="25"/>
+        <image name="Home Display Icon" width="25" height="25"/>
         <image name="Tab Bar Icons" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="DQ5-OV-HP4"/>
+        <segue reference="oGd-iJ-QkN"/>
     </inferredMetricsTieBreakers>
 </document>
