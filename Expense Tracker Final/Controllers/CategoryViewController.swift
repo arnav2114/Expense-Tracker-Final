@@ -52,9 +52,6 @@ class CategoryViewController: UITableViewController {
     override func viewDidLoad() {
         
     if (categories.count == 0) {
-            /*let category:Category = CoreDataHelper.createNewCategory()
-            category.title = "Fod"
-            CoreDataHelper.save()*/
         }
         super.viewDidLoad()
         self.categories = CoreDataHelper.retrieveCategories()

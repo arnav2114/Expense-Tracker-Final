@@ -41,6 +41,9 @@ class CollectionDisplayViewController:UITableViewController {
                 UserDefaults.standard.set(collectionSum, forKey: "collectionTotal")            }
         }
         print(collectionSum)
+       /* if let currentCollection = self.navigationItem.title {
+            UserDefaults.standard.set(collectionSum, forKey: "\(currentCollection)Total")
+        }*/
     }
 
     

@@ -17,6 +17,8 @@ class CollectionCreatorViewController: UITableViewController {
                 tableView.reloadData()
             }
         }
+    var collectionTotals:[Int] = []
+    
     var totalAmountDisplayed2:String = ""
     var collectionNamePassed:String = ""
         
@@ -57,6 +59,13 @@ class CollectionCreatorViewController: UITableViewController {
             
         }
     
+    override func viewWillAppear(_ animated: Bool) {
+    /* for i in 0..<collectionTotals.count {
+     collectionTotals[i] = UserDefaults.standard.integer(forKey:"\(collections[i])Total")
+     }*/
+
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         if let total2 = UserDefaults.standard.string(forKey: "collectionTotal") {
             self.totalAmountDisplayed2 = total2
@@ -76,9 +85,8 @@ class CollectionCreatorViewController: UITableViewController {
             let collection1 = collections[row]
             cell.collectionName.text = collection1.title!
             cell.totalCollectionExpense.text = totalAmountDisplayed2
+        
             
-            
-
             return cell
         }
         
@@ -89,7 +97,6 @@ class CollectionCreatorViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let collectionDisplayController = segue.destination as! CollectionDisplayViewController
         collectionDisplayController.navigationItem.title = collectionNamePassed
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

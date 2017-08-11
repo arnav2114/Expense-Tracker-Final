@@ -50,13 +50,7 @@ class YearViewController: UITableViewController{
             self.totalAmountDisplayed = total
             tableView.reloadData()
         }
-        
-
-        
-        /*for month in months{
-            totalFinalAmount = Int(totalAmountDisplayed)!.reduce(0) { $0 + $1 }
-        }
-        }*/
+    
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,9 +65,6 @@ class YearViewController: UITableViewController{
             
         cell.monthAmountLabel.text = String(monthTotals[indexPath.row])
         
-        /*if Int(cell.monthLabel.text!)! < 0 {
-            cell.monthLabel.textColor = UIColor.red
-        }*/
         
         cell.totalAmountLabel.text = String(totalFinalAmount)
         
@@ -86,6 +77,13 @@ class YearViewController: UITableViewController{
             cell.monthAmountLabel.isHidden = false
         }
         
+        if Int(cell.monthAmountLabel.text!)! < 0 {
+            cell.monthAmountLabel.textColor = UIColor.red
+        }
+        
+        else if Int(cell.monthAmountLabel.text!)! >= 0 {
+            cell.monthAmountLabel.textColor = UIColor.green
+        }
         
         return cell
         
