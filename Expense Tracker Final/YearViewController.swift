@@ -71,6 +71,10 @@ class YearViewController: UITableViewController{
             
         cell.monthAmountLabel.text = String(monthTotals[indexPath.row])
         
+        /*if Int(cell.monthLabel.text!)! < 0 {
+            cell.monthLabel.textColor = UIColor.red
+        }*/
+        
         cell.totalAmountLabel.text = String(totalFinalAmount)
         
         if indexPath.row == 12 {
