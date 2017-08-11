@@ -31,7 +31,12 @@ class NewTransactionController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.hidesBackButton = true
-    
+        
+        if let category2 = UserDefaults.standard.string(forKey: "displayedCategory") {
+            self.categoryDisplayed = category2
+            tableView.reloadData()
+            
+        }
 
         if let expense = newExpenses {
             expenseLabel.text = expense.name

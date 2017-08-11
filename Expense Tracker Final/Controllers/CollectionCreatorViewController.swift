@@ -120,3 +120,4 @@ class CollectionCreatorViewController: UITableViewController {
     }
     
 }
+
