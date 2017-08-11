@@ -17,6 +17,7 @@ class CollectionCreatorViewController: UITableViewController {
                 tableView.reloadData()
             }
         }
+    var totalAmountDisplayed2:String = ""
     var collectionNamePassed:String = ""
         
         @IBAction func addCollectionButton(_ sender: Any) {
@@ -55,7 +56,15 @@ class CollectionCreatorViewController: UITableViewController {
             tableView.reloadData()
             
         }
-        
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if let total2 = UserDefaults.standard.string(forKey: "collectionTotal") {
+            self.totalAmountDisplayed2 = total2
+            tableView.reloadData()
+        }
+    }
+    
+    
         override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return collections.count
         }
@@ -66,6 +75,7 @@ class CollectionCreatorViewController: UITableViewController {
             let row = indexPath.row
             let collection1 = collections[row]
             cell.collectionName.text = collection1.title!
+            cell.totalCollectionExpense.text = totalAmountDisplayed2
             
             
 

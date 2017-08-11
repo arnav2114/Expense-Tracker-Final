@@ -20,12 +20,16 @@ import CoreData
 
 class MonthlyDisplayViewController: UITableViewController {
     
+    var month:String?
+    
+    
     var sum:Int = 0
     var monthlyExpenses = [Expense]() {
         didSet {
             tableView.reloadData()
         }
     }
+    
     
     var sumToBeStored: TotalExpense?
     
@@ -37,20 +41,27 @@ class MonthlyDisplayViewController: UITableViewController {
         
         //if let totalExpense = sumToBeStored{
         
-        
+
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         for expense in monthlyExpenses {
-            if expense.modificationDate?.convertToMonth() == navigationItem.title{
-            let expenseAmount = Int(expense.amount!)
-            if expense.expense {
-                sum = sum - expenseAmount!
+            if expense.modificationDate?.convertToMonth() == self.navigationItem.title {
+                let expenseAmount = Int(expense.amount!)
+                
+                if expense.expense {
+                    sum = sum - expenseAmount!
+                } else if expense.income {
+                    sum = sum + expenseAmount!
+                }
+                
             }
-            else if expense.income {
-                sum = sum + expenseAmount!
-            }
-                expense.total = String(sum)
-            UserDefaults.standard.set(expense.total, forKey: "totalAmount")            }
         }
         print(sum)
+        if let currentMonth = self.month {
+            UserDefaults.standard.set(sum, forKey: "\(currentMonth)Total")
+        }
     }
     
     

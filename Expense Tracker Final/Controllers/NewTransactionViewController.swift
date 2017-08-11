@@ -31,6 +31,7 @@ class NewTransactionController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.hidesBackButton = true
+    
 
         if let expense = newExpenses {
             expenseLabel.text = expense.name
@@ -56,6 +57,7 @@ class NewTransactionController: UIViewController {
         let result = formatter.string(from: date)
         
         dateLabel.text = result
+        
         
         if let category = UserDefaults.standard.string(forKey: "selectedCategory") {
             self.categoryDisplayed = category

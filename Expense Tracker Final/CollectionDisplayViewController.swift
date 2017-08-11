@@ -17,6 +17,8 @@ class CollectionDisplayViewController:UITableViewController {
             tableView.reloadData()
         }
     }
+    
+    var collectionSum:Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,22 @@ class CollectionDisplayViewController:UITableViewController {
         self.collectionExpenses = CoreDataHelper.retrieveExpenses()
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        for expense in collectionExpenses {
+            if expense.collection == navigationItem.title{
+                let expenseAmount = Int(expense.amount!)
+                if expense.expense {
+                    collectionSum = collectionSum - expenseAmount!
+                }
+                else if expense.income {
+                    collectionSum = collectionSum + expenseAmount!
+                }
+                UserDefaults.standard.set(collectionSum, forKey: "collectionTotal")            }
+        }
+        print(collectionSum)
+    }
+
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return collectionExpenses.count

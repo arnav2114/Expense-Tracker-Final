@@ -13,6 +13,7 @@ import CoreData
 class YearViewController: UITableViewController{
     
     var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Total"]
+    var monthTotals:[Int] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     var monthPassed:String = ""
     
@@ -34,19 +35,29 @@ class YearViewController: UITableViewController{
      }
     
     override func viewDidLoad() {
+
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
         
+        for i in 0..<monthTotals.count {
+            monthTotals[i] = UserDefaults.standard.integer(forKey:"\(months[i])Total")
+        }
+        
         if let total = UserDefaults.standard.string(forKey: "totalAmount") {
-                    self.totalAmountDisplayed = total
-                    tableView.reloadData()
-                }
+            self.totalAmountDisplayed = total
+            tableView.reloadData()
+        }
         
+
         
-            }
+        /*for month in months{
+            totalFinalAmount = Int(totalAmountDisplayed)!.reduce(0) { $0 + $1 }
+        }
+        }*/
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return months.count
@@ -57,9 +68,8 @@ class YearViewController: UITableViewController{
         let cell = tableView.dequeueReusableCell(withIdentifier: "monthCell", for: indexPath) as! YearTableViewCell
         
         cell.monthLabel.text = months[indexPath.row]
-        
             
-        cell.monthAmountLabel.text = totalAmountDisplayed
+        cell.monthAmountLabel.text = String(monthTotals[indexPath.row])
         
         cell.totalAmountLabel.text = String(totalFinalAmount)
         
@@ -67,8 +77,7 @@ class YearViewController: UITableViewController{
             
             cell.totalAmountLabel.isHidden = false
             cell.monthAmountLabel.isHidden = true
-        }
-        else {
+        } else {
             cell.totalAmountLabel.isHidden = true
             cell.monthAmountLabel.isHidden = false
         }
@@ -84,6 +93,7 @@ class YearViewController: UITableViewController{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let monthlyDisplayController = segue.destination as! MonthlyDisplayViewController
         monthlyDisplayController.navigationItem.title = monthPassed
+        monthlyDisplayController.month = monthPassed
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
