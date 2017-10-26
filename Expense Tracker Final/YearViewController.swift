@@ -12,59 +12,82 @@ import CoreData
 
 class YearViewController: UITableViewController{
     
-    var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Total"]
-    var monthTotals:[Int] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    var months:[String] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December","Total"]
+    var monthTotals:[Double] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     var monthPassed:String = ""
     
     var totalAmountDisplayed:String = ""
     
-    var totalFinalAmount:Int = 0
+    var totalFinalAmount:Double = 0
     
     var monthExpenses = [Expense]() {
         didSet {
             tableView.reloadData()
         }
     }
-
+    
     
     @IBAction func moveBackToMonth(_sender:AnyObject){
-    
+        
         _ = navigationController?.popViewController(animated: true);
-
-     }
-    
-    override func viewDidLoad() {
-
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidLoad() {
+        
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.tableFooterView?.isHidden = true
+        tableView.backgroundColor = UIColor.white
+        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        tableView.separatorColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0)
+        
+        tableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
         
-        for i in 0..<monthTotals.count {
-            monthTotals[i] = UserDefaults.standard.integer(forKey:"\(months[i])Total")
+        totalFinalAmount = 0
+        
+        for var i in 0..<months.count {
+            totalFinalAmount += monthTotals[i]
+            i += 1
         }
         
-        if let total = UserDefaults.standard.string(forKey: "totalAmount") {
-            self.totalAmountDisplayed = total
-            tableView.reloadData()
+        for i in 0..<monthTotals.count {
+            monthTotals[i] = UserDefaults.standard.double(forKey:"\(months[i])Total")
         }
-    
+        
+//        if let total = UserDefaults.standard.string(forKey: "totalAmount") {
+//            self.totalAmountDisplayed = total
+//            tableView.reloadData()
+//        }
+        
+        tableView.reloadData()
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return months.count
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 63.5;//Creating custom row height
+    }
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "monthCell", for: indexPath) as! YearTableViewCell
         
-        cell.monthLabel.text = months[indexPath.row]
-            
-        cell.monthAmountLabel.text = String(monthTotals[indexPath.row])
         
+        cell.monthLabel.text = months[indexPath.row]
+        
+        cell.monthAmountLabel.text = String(monthTotals[indexPath.row])
         
         cell.totalAmountLabel.text = String(totalFinalAmount)
         
@@ -77,13 +100,22 @@ class YearViewController: UITableViewController{
             cell.monthAmountLabel.isHidden = false
         }
         
-        if Int(cell.monthAmountLabel.text!)! < 0 {
+        if Double(cell.monthAmountLabel.text!)! < 0 {
             cell.monthAmountLabel.textColor = UIColor.red
         }
-        
-        else if Int(cell.monthAmountLabel.text!)! >= 0 {
+            
+        else if Double(cell.monthAmountLabel.text!)! >= 0 {
             cell.monthAmountLabel.textColor = UIColor.green
         }
+        
+        if Double(cell.totalAmountLabel.text!)! < 0 {
+            cell.totalAmountLabel.textColor = UIColor.red
+        }
+            
+        else if Double(cell.totalAmountLabel.text!)! >= 0 {
+            cell.totalAmountLabel.textColor = UIColor.green
+        }
+        
         
         return cell
         
@@ -104,6 +136,7 @@ class YearViewController: UITableViewController{
         
         performSegue(withIdentifier: "displayMonth", sender: self)
         
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

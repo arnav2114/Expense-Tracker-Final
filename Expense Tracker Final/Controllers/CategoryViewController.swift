@@ -10,13 +10,16 @@ import Foundation
 import UIKit
 import CoreData
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    @IBOutlet weak var tableView: UITableView!
     
     var categories = [Category]() {
         didSet{
             tableView.reloadData()
         }
     }
+    
+    @IBOutlet weak var noCategoryLabel: UILabel!
     
     @IBAction func addCategoryButton(_ sender: Any) {
         let alert = UIAlertController(title: "Create New Category", message: "", preferredStyle: .alert)
@@ -26,14 +29,14 @@ class CategoryViewController: UITableViewController {
                 let categoryToSave = textField.text else {
                     return
             }
-
+            
             let newCategory:Category = CoreDataHelper.createNewCategory()
             newCategory.title = categoryToSave
             
             CoreDataHelper.save()
             self.categories = CoreDataHelper.retrieveCategories()
             
-
+            
         })
         
         let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) -> Void in })
@@ -50,20 +53,32 @@ class CategoryViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.tableFooterView?.isHidden = true
+        tableView.backgroundColor = UIColor.clear
+        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        tableView.separatorColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0)
         
-    if (categories.count == 0) {
+        if (categories.count == 0) {
         }
         super.viewDidLoad()
         self.categories = CoreDataHelper.retrieveCategories()
         tableView.reloadData()
-
+        
+        noCategoryLabel.isHidden = true
+        
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if categories.count == 0 {
+            noCategoryLabel.isHidden = false
+        }
         return categories.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath) as! CategoryTableViewCell
         
         let row = indexPath.row
@@ -71,20 +86,19 @@ class CategoryViewController: UITableViewController {
         cell.categoryLabel.text = category.title
         
         
-    return cell
+        return cell
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = .checkmark
         UserDefaults.standard.set(categories[indexPath.row].title!, forKey: "selectedCategory")
-        
         performSegue(withIdentifier: "unwindToNewTransactionViewController", sender: self)
         
     }

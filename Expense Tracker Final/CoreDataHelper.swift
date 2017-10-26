@@ -83,7 +83,7 @@ class CoreDataHelper {
         let fetchRequest = NSFetchRequest<Expense>(entityName: "Expense")
         do {
             let results = try managedContext.fetch(fetchRequest)
-            return results
+            return results.sorted { $0.modificationDate?.compare($1.modificationDate! as Date) == ComparisonResult.orderedAscending }
         } catch let error as NSError{
             print ("Could not retrieve \(error)")
         }

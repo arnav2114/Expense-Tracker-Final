@@ -24,6 +24,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftyJSON.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>nanopb.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,7 +47,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD345563EB7DA11F66A1CA90E1B73DD8</key>
+		<key>A01D5BDF1C27965B4C303DBA56595FAB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A4B867CC51CB21CA66B6C3FBA50C011A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -16,6 +16,7 @@ class CollectionDisplayTableViewCell: UITableViewCell {
     @IBOutlet weak var expenseAmount:UILabel!
     @IBOutlet weak var expenseDate:UILabel!
     @IBOutlet weak var  expenseCategory:UILabel!
-    @IBOutlet weak var  expenseCurrency:UILabel!
+    @IBOutlet weak var cashOrCredit: UIImageView!
+
 
 }

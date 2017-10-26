@@ -10,114 +10,193 @@ import Foundation
 import UIKit
 import CoreData
 
-class CollectionCreatorViewController: UITableViewController {
+class CollectionCreatorViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    @IBOutlet weak var noCollectionLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    
     var collections = [Collections]() {
-            //"Food","Transportation","Medical Expense","Shopping","Entertainment","Private"
-            didSet{
-                tableView.reloadData()
-            }
+        didSet{
+            tableView.reloadData()
         }
-    var collectionTotals:[Int] = []
+    }
+    
+    var collectionExpensesDelete = [Expense]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     var totalAmountDisplayed2:String = ""
+    
     var collectionNamePassed:String = ""
-        
-        @IBAction func addCollectionButton(_ sender: Any) {
-            let alert = UIAlertController(title: "Create New Collection", message: "", preferredStyle: .alert)
-            let submitAction = UIAlertAction(title: "Submit", style: .default, handler: { (action) -> Void in
-                // Get 1st TextField's text
-                guard let textField = alert.textFields?.first,
-                    let collectionToSave = textField.text else {
-                        return
-                }
-                
-                let newCollections:Collections = CoreDataHelper.createNewCollection()
-                newCollections.title = collectionToSave
-                
-                CoreDataHelper.save()
-                self.collections = CoreDataHelper.retrieveCollections()
-                
-            })
-            
-            let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) -> Void in })
-            alert.addTextField { (textField: UITextField) in
-                textField.keyboardAppearance = .dark
-                textField.keyboardType = .default
-                textField.autocorrectionType = .default
-                textField.placeholder = "Collection Name"
-                textField.clearButtonMode = .whileEditing
+    
+    var collectionsTotal:[Double] = []
+    
+    @IBAction func addCollectionButton(_ sender: Any) {
+        let alert = UIAlertController(title: "Create New Collection", message: "", preferredStyle: .alert)
+        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: { (action) -> Void in
+            guard let textField = alert.textFields?.first,
+                let collectionToSave = textField.text else {
+                    return
             }
-            alert.addAction(submitAction)
-            alert.addAction(cancel)
-            present(alert, animated: true, completion: nil)
-        }
-        
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            self.collections = CoreDataHelper.retrieveCollections()
-            tableView.reloadData()
             
+            let newCollections:Collections = CoreDataHelper.createNewCollection()
+            newCollections.title = collectionToSave
+            
+            
+            CoreDataHelper.save()
+            self.collections = CoreDataHelper.retrieveCollections()
+            self.tableView.reloadData()
+            
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .destructive, handler: { (action) -> Void in })
+        alert.addTextField { (textField: UITextField) in
+            textField.keyboardAppearance = .dark
+            textField.keyboardType = .default
+            textField.autocorrectionType = .default
+            textField.placeholder = "Collection Name"
+            textField.clearButtonMode = .whileEditing
         }
+        alert.addAction(submitAction)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func convertToMoney(_ money:Double)->String{
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        
+        return(numberFormatter.string(for: money))!
+    }
+    
+    override func viewDidLoad() {
+        
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.tableFooterView?.isHidden = true
+        tableView.backgroundColor = UIColor.clear
+        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        tableView.separatorColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0)
+        
+        super.viewDidLoad()
+        self.collections = CoreDataHelper.retrieveCollections()
+        self.collectionExpensesDelete = CoreDataHelper.retrieveExpenses()
+        tableView.reloadData()
+        
+        noCollectionLabel.isHidden = true
+        
+    }
     
     override func viewWillAppear(_ animated: Bool) {
-    /* for i in 0..<collectionTotals.count {
-     collectionTotals[i] = UserDefaults.standard.integer(forKey:"\(collections[i])Total")
-     }*/
-
+        
+        noCollectionLabel.isHidden = true
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if let total2 = UserDefaults.standard.string(forKey: "collectionTotal") {
-            self.totalAmountDisplayed2 = total2
-            tableView.reloadData()
-        }
+        self.collections = CoreDataHelper.retrieveCollections()
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if collections.count == 0 {
+            noCollectionLabel.isHidden = false
+        }
+        return collections.count
+    }
     
-        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return collections.count
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        collectionsTotal = collections.map {_ in 0}
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "collectionCell", for: indexPath) as! CollectionCreatorTableViewCell
+        
+        let row = indexPath.row
+        let collection1 = collections[row]
+        
+        cell.collectionName.text = collection1.title!
+        
+        for i in 0..<collectionsTotal.count {
+            collectionsTotal[i] = (UserDefaults.standard.double(forKey:"\(collections[i].title!)Total"))
         }
         
-        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "collectionCell", for: indexPath) as! CollectionCreatorTableViewCell
-            
-            let row = indexPath.row
-            let collection1 = collections[row]
-            cell.collectionName.text = collection1.title!
-            cell.totalCollectionExpense.text = totalAmountDisplayed2
+        cell.totalCollectionExpense.text = convertToMoney(collectionsTotal[indexPath.row])
         
-            
-            return cell
+        if collectionsTotal[indexPath.row]>=0{
+        cell.totalCollectionExpense.textColor = UIColor(red:0.49, green:0.83, blue:0.13, alpha:1.0)
+        }
+        else if collectionsTotal[indexPath.row]<0{
+            cell.totalCollectionExpense.textColor = UIColor.red
         }
         
-        override func numberOfSections(in tableView: UITableView) -> Int {
-            return 1
-        }
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let collectionDisplayController = segue.destination as! CollectionDisplayViewController
         collectionDisplayController.navigationItem.title = collectionNamePassed
+        collectionDisplayController.collectionNow = collectionNamePassed
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 63.5;//Creating custom row height
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        print(collectionsTotal[indexPath.row])
         
         collectionNamePassed = collections[indexPath.row].title!
         
         performSegue(withIdentifier: "displayCollection", sender: self)
-
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        self.collections = CoreDataHelper.retrieveCollections()
+        
+        
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
-            if indexPath.row != nil {
-                let collection = collections[indexPath.row]
+            let refreshAlert = UIAlertController(title: "Delete Collection", message: "All expenses in this collection will also be lost.", preferredStyle: UIAlertControllerStyle.alert)
+            
+            refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                
+                let collection = self.collections[indexPath.row]
+                print(self.collections[indexPath.row].title!)
+                for expense in self.collectionExpensesDelete{
+                    if expense.collection == self.collections[indexPath.row].title{
+                        if let expenseDeleter = self.collectionExpensesDelete.index(of: expense) {
+                            self.collectionExpensesDelete.remove(at: expenseDeleter)
+                            CoreDataHelper.deleteExpense(expense: expense)
+                        }
+                    }
+                }
                 CoreDataHelper.deleteCollection(collection: collection)
-                collections.remove(at: indexPath.row)
-                collections = CoreDataHelper.retrieveCollections()
-            }
+                self.collections.remove(at: indexPath.row)
+                self.collections = CoreDataHelper.retrieveCollections()
+            }))
+            
+            refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                self.collections = CoreDataHelper.retrieveCollections()
+            }))
+            present(refreshAlert, animated: true, completion: nil)
             
         }
+        
     }
-    
 }
+
 

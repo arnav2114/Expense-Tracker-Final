@@ -4,27 +4,27 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Collections" representedClassName="Collections" syncable="YES" codeGenerationType="class">
+        <attribute name="amount" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Expense" representedClassName="Expense" syncable="YES" codeGenerationType="class">
         <attribute name="amount" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cash" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="collection" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="credit" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="currency" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currencyName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currencySymbol" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="expense" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="income" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="modificationDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="total" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="TotalExpense" representedClassName="TotalExpense" syncable="YES" codeGenerationType="class">
-        <attribute name="monthName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="totalExpense" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
     <elements>
         <element name="Category" positionX="-81" positionY="3" width="128" height="60"/>
-        <element name="Collections" positionX="-81" positionY="-180" width="128" height="58"/>
-        <element name="Expense" positionX="162" positionY="-99" width="128" height="178"/>
-        <element name="TotalExpense" positionX="45" positionY="-81" width="128" height="73"/>
+        <element name="Collections" positionX="-81" positionY="-180" width="128" height="75"/>
+        <element name="Expense" positionX="162" positionY="-99" width="128" height="240"/>
     </elements>
 </model>

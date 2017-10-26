@@ -18,58 +18,106 @@ import Foundation
 import UIKit
 import CoreData
 
-class MonthlyDisplayViewController: UITableViewController {
-    
+class MonthlyDisplayViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     var month:String?
+    var sum:Double = 0
     
+    @IBOutlet weak var tableView:UITableView!
     
-    var sum:Int = 0
     var monthlyExpenses = [Expense]() {
         didSet {
             tableView.reloadData()
         }
     }
     
+    @IBOutlet weak var noExpenseLabel: UILabel!
     
-    var sumToBeStored: TotalExpense?
     
     override func viewDidLoad() {
+        
+        tableView.tableFooterView = UIView(frame: .zero)
+        tableView.tableFooterView?.isHidden = true
+        tableView.backgroundColor = UIColor.clear
+        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        tableView.separatorColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0)
+        
         super.viewDidLoad()
         self.navigationController?.navigationBar.backItem?.title = "Back"
         
+        noExpenseLabel.isHidden = true
+        
         self.monthlyExpenses = CoreDataHelper.retrieveExpenses()
-        
-        //if let totalExpense = sumToBeStored{
-        
 
-
+        
     }
+    
+    func convertToMoney(_ money:Double)->String{
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        
+        return(numberFormatter.string(for: money))!
+    }
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+        noExpenseLabel.isHidden = true
+        
+        self.monthlyExpenses = CoreDataHelper.retrieveExpenses()
+    }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         for expense in monthlyExpenses {
             if expense.modificationDate?.convertToMonth() == self.navigationItem.title {
-                let expenseAmount = Int(expense.amount!)
+                let expenseAmount = Double(expense.amount!)
                 
                 if expense.expense {
                     sum = sum - expenseAmount!
                 } else if expense.income {
                     sum = sum + expenseAmount!
                 }
-                
             }
         }
-        print(sum)
         if let currentMonth = self.month {
             UserDefaults.standard.set(sum, forKey: "\(currentMonth)Total")
         }
+        self.monthlyExpenses = CoreDataHelper.retrieveExpenses()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if identifier == "changeTransaction2" {
+                let indexPath = tableView.indexPathForSelectedRow!
+                let expense = monthlyExpenses[indexPath.row]
+                
+                let displayNewTransactionController = segue.destination as! NewTransactionController
+                displayNewTransactionController.newExpenses = expense
+                
+                UserDefaults.standard.set(expense.category, forKey: "selectedCategory")
+                
+                UserDefaults.standard.set(expense.collection, forKey: "selectedCollection")
+                
+                UserDefaults.standard.set(expense.currency, forKey: "selectedCurrencyCode")
+                
+                UserDefaults.standard.set(expense.currencyName, forKey: "selectedCurrencyName")
+                
+                
+            }
+        }
+    }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if monthlyExpenses.count == 0{
+            noExpenseLabel.isHidden = false
+        }
+        
         return monthlyExpenses.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "monthlyCell", for: indexPath) as! MonthlyExpenseTableViewCell
         
         let row = indexPath.row
@@ -85,36 +133,41 @@ class MonthlyDisplayViewController: UITableViewController {
         
         CoreDataHelper.save()
         
+        var expenseAmountCalculating:Double = Double(expense.amount!)!
+        var expenseAmountDisplayed:String = convertToMoney(expenseAmountCalculating)
+        
+        var finalDisplayed:String = expense.currencySymbol! + " " + expenseAmountDisplayed
+        
+        print(finalDisplayed)
+        
         cell.expenseName2.text = expense.name
-        cell.expenseDate2.text = expense.modificationDate?.convertToDM()
-        cell.expenseAmount2.text = expense.amount
+        cell.expenseAmount2.text = finalDisplayed
         cell.expenseCategory2.text = expense.category
-        cell.expenseCurrency2.text = expense.currency
         cell.expenseCollection2.text = expense.collection
         
         if expense.expense {
-            cell.expenseCurrency2.textColor = UIColor.red
             cell.expenseAmount2.textColor = UIColor.red
         }
         else if expense.income{
-            cell.expenseCurrency2.textColor = UIColor.green
             cell.expenseAmount2.textColor = UIColor.green
         }
         
         return cell
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 63.5
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
-            if indexPath.row != nil {
-                let collection = monthlyExpenses[indexPath.row]
-                CoreDataHelper.deleteExpense(expense: collection)
-                monthlyExpenses.remove(at: indexPath.row )
-                monthlyExpenses = CoreDataHelper.retrieveExpenses()
-            }
+            let collection = monthlyExpenses[indexPath.row]
+            CoreDataHelper.deleteExpense(expense: collection)
+            monthlyExpenses.remove(at: indexPath.row )
+            monthlyExpenses = CoreDataHelper.retrieveExpenses()
         }
     }
 }

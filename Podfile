@@ -10,6 +10,7 @@ target 'Expense Tracker Final' do
   pod 'FirebaseUI/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
+  pod 'SwiftyJSON'
 end
 
 
