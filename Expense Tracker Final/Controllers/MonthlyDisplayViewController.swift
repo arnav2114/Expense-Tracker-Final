@@ -152,6 +152,23 @@ class MonthlyDisplayViewController: UIViewController, UITableViewDelegate, UITab
             cell.expenseAmount2.textColor = UIColor.green
         }
         
+        if expense.cash && expense.expense{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Cash-Expense Icon")
+            
+        }
+        else if expense.cash && expense.income{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Cash-Income Icon")
+            
+        }
+        else if expense.credit && expense.income{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Credit-Income Icon")
+            
+        }
+        else if expense.credit && expense.income{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Credit-Expense Icon")
+            
+        }
+        
         return cell
     }
     

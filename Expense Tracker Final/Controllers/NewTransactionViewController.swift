@@ -204,6 +204,9 @@ class NewTransactionController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        let indexpath = NSIndexPath(row: 0, section: 0)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexpath as IndexPath) as! ListDataTableViewCell
+        
         if let identifier = segue.identifier {
             if identifier == "categorySelect" {
             } else if identifier == "albumSelect" {
@@ -217,6 +220,13 @@ class NewTransactionController: UIViewController {
                 switch expenseType.selectedSegmentIndex{
                 case 0: expense.income = true && expense.expense != true
                 case 1: expense.expense = true && expense.income != true
+                default:
+                    break
+                }
+                
+                switch cell.methodType.selectedSegmentIndex{
+                case 0: expense.cash = true && expense.credit != true
+                case 1: expense.credit = true && expense.cash != true
                 default:
                     break
                 }
@@ -285,7 +295,6 @@ extension NewTransactionController: UITableViewDataSource {
         
         if indexPath.row == 0{
             cell.isHidden = true
-            
         }
         
         else if indexPath.row == 1{

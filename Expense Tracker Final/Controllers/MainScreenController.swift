@@ -16,17 +16,14 @@ class MainScreenController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noExpenseLabel: UILabel!
     
-    
-    var cashImage: UIImage?
-    var creditImage: UIImage?
+
     
     var expenses = [Expense]() {
         didSet {
             tableView.reloadData()
         }
     }
-    
-    
+
     override func viewDidLoad() {
         
         tableView.tableFooterView = UIView(frame: .zero)
@@ -157,18 +154,24 @@ extension MainScreenController: UITableViewDataSource {
         
         if expense.expense {
             cell.expenseAmount.textColor = UIColor.red
+            print("expense")
         }else if expense.income {
             cell.expenseAmount.textColor = UIColor(red:0.49, green:0.83, blue:0.13, alpha:1.0)
         }
         
-        if expense.cash{
-            cell.cashOrCredit.image = #imageLiteral(resourceName: "Cash Image")
-            
+        if expense.cash && expense.expense{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Cash-Expense Icon")
         }
-        else if expense.credit{
-            cell.cashOrCredit.image = #imageLiteral(resourceName: "Credit Image")
-            
+        else if expense.cash && expense.income{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Cash-Income Icon")
         }
+        else if expense.credit && expense.income{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Credit-Income Icon")
+        }
+        else if expense.credit && expense.income{
+            cell.cashOrCredit.image = #imageLiteral(resourceName: "Credit-Expense Icon")
+        }
+        
         return cell
         
     }
